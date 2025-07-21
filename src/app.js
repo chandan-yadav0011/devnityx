@@ -1,35 +1,37 @@
 const express = require("express");
 const app = express();
-const connectDB = require("./config/database.js");
-const User = require("./models/user.js");
+const connectDB = require("./config/database");
+const User = require("./models/user");
+
+
+
 
 
 app.post("/signup",async(req,res)=>{
     const user = new User({
         firstName:"Chandan",
         lastName:"Yadav",
-        email:"chandanyadav8145@gmail.com",
-        password:"Password@123",
+        email:"chandanyadab563@gmail.com",
+        password:"chandan@123",
         age:22,
         gender:"Male"
     });
 
     await user.save();
 
-    res.send("User added successfully.");
-});
-
+    res.send("User added successfully")
+})
 
 connectDB()
-.then(()=>{
-
+ .then(()=>{
     console.log("Database connected successfully...");
     app.listen(8000,()=>{
-        console.log("Server listening on Port 8000.");
-    });
+        console.log("Server listening on Port 8000");
     })
-.catch((err)=>{
-    console.log("Database connection failed!!");
-});
+ })
+ .catch((err)=>{
+    console.log("Database connection failed!!!");
+ });
+
 
 
