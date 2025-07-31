@@ -1,4 +1,5 @@
-const mongoose= require("mongoose");
+const mongoose = require("mongoose");
+const validate = require("validator");
 
 const userSchema = new mongoose.Schema({
     firstName:{
@@ -13,12 +14,21 @@ const userSchema = new mongoose.Schema({
         required:true,
         unique:true,
         lowercase:true,
-        trim:true
+        trim:true,
+        validate(value){
+            if(!validate.isEmail(value))  throw new Error("Invalid email "+ value)
+        }
     },
     password:{
         type:String,
         required:true,
-        minLength:8
+        minLength:8,
+        minLowercase:1,
+        minUppercase:1,
+        minSymbols:1,
+        validate(value){
+            if(!validate.isStrongPassword(value))  throw new Error("Enter a Strong password ");
+        }
     },
     gender:{
         type:String,
@@ -30,11 +40,14 @@ const userSchema = new mongoose.Schema({
     },
     age:{
         type:Number,
-        min:18
+        
     },
     photoUrl:{
         type:String,
-        default:"https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg"
+        default:"https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg",
+        validate(value){
+            if(!validate.isURL(value)) throw new Error("Invalid photo URL")
+        }
     },
     about:{
         type:String,
