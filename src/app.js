@@ -4,22 +4,90 @@ const connectDB = require("./config/database");
 const User = require("./models/user");
 
 
-
+app.use(express.json());   // converts the json to javascript object
 
 
 app.post("/signup",async(req,res)=>{
-    const user = new User({
-        firstName:"Chandan",
-        lastName:"Yadav",
-        email:"chandanyadab563@gmail.com",
-        password:"chandan@123",
-        age:22,
-        gender:"Male"
-    });
 
+    try{
+        const user = new User(req.body);
+    
     await user.save();
 
     res.send("User added successfully")
+    }
+    catch(err){
+        res.status(400).send("Something went wrong "+ err.message);    
+    }   
+   
+});
+
+app.get("/feed",async(req,res)=>{
+    const feed = await User.find();
+    try{
+        if(feed.length==0){
+            res.status(404).send("No feed available");
+        }
+        else{
+            res.status(200).send(feed);
+        }
+    }
+    catch(err){
+        res.status(400).send("Something went wrong");
+    }
+})
+
+
+//get user by a particular email id
+
+app.get("/user",async(req,res)=>{
+    const emailId = req.body.email;
+   
+   
+    try{
+        const user = await User.findOne();
+        if(user===null){
+            res.status(404).send("No user found!");
+        }
+        else{
+            res.status(200).send(user);
+        }
+    }
+    catch(err){
+    
+        res.status(400).send("Error: " + err.message)
+    }
+})
+
+app.delete("/delete",async(req,res)=>{
+    const id= req.body.id;
+    try{
+        const user = await User.findByIdAndDelete(id);
+        if(user===null) res.send("User doesn't exists");
+        else res.status(200).send("User deleted successfully");
+    }
+    catch(err){
+        res.status(400).send("Bad request.");
+    }
+ 
+});
+
+app.patch("/update", async(req,res)=>{
+    const id = req.body.id;
+    const data= req.body;
+    const ALLOWED_UPDATES= ["firstName", "lastName", "age", "photoUrl"];
+    try{
+        // const user = await User.findById(id);
+        // const userUpdated = await User.findByIdAndUpdate(id,data,{runValidators:true});
+        
+        const result = await User.updateOne({_id:id},{$set:data},{runValidators:true});
+        if (result.matchedCount === 0)  return res.status(404).send("User not found");
+        if (result.modifiedCount === 0) return res.status(400).send("Nothing was updated.");
+        res.send("User updated successfully");
+    }
+    catch(err){
+        res.status(400).send("Something went wrong " + err.message);
+    }
 })
 
 connectDB()
