@@ -11,7 +11,7 @@ router.post("/signup",async(req,res)=>{
         validateSignUpData(req);
 
         //Encrypting the password.
-        const {firstName,lastName,password,email,gender} = req.body;
+        const {firstName,lastName,password,email,gender,} = req.body;
         const hashedPassword = await bcrypt.hash(password,10)
        
         const user = new User({
@@ -19,7 +19,8 @@ router.post("/signup",async(req,res)=>{
             lastName,
             password:hashedPassword,
             email,
-            gender
+            gender,
+            
         });
 
         //Saving to DB 
@@ -72,5 +73,10 @@ router.post("/login",async(req,res)=>{
         res.status(400).send("Something went wrong "+ err.message);
     } 
 });
+
+router.post("/logout",async(req,res)=>{
+    res.cookie("token",null,{expires: new Date(Date.now())});
+    res.send("logout successful");
+})
 
 module.exports = router;

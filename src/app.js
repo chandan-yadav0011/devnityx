@@ -2,14 +2,12 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
 const User = require("./models/user");
-
 const cookieParser = require('cookie-parser');
-const userAuth = require('./middlewares/auth');
-app.use(express.json());   // converts the json to javascript object
-app.use(cookieParser());
 const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
 const requestRouter = require('./routes/request');
+app.use(express.json());   // converts the json to javascript object
+app.use(cookieParser());
 
 app.use("/",authRouter);
 app.use("/",profileRouter);
@@ -64,10 +62,6 @@ app.delete("/delete",async(req,res)=>{
     }
  
 });
-
-
-
-
 
 connectDB()
  .then(()=>{
