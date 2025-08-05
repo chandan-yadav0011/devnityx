@@ -6,12 +6,15 @@ const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
 const requestRouter = require('./routes/request');
+const userRouter = require("./routes/user");
 app.use(express.json());   // converts the json to javascript object
 app.use(cookieParser());
 
 app.use("/",authRouter);
 app.use("/",profileRouter);
 app.use("/",requestRouter);
+app.use("/",userRouter);
+
 
 app.get("/feed",async(req,res)=>{
     const feed = await User.find();
