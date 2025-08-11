@@ -17,9 +17,11 @@ const validateLoginData = (req)=>{
 
 const validateUpdateData = (req)=>{
     //const {firstName, lastName, gender, age,photoURL}= req.body;
-    const ALLOWED_UPDATES = ["firstName","lastName","gender","skills","age","photoURL","about"];
+    const ALLOWED_UPDATES = ["firstName","lastName","gender","skills","age","photoUrl","about"];
     const data = req.body;
-    const isUpdateAllowed = Object.keys(data).every((k)=>ALLOWED_UPDATES.includes(k));
+   
+    const isUpdateAllowed  = Object.keys(data).every((k)=>ALLOWED_UPDATES.includes(k));
+
     return isUpdateAllowed;
     // if(!firstName) throw new Error("Invalid First Name");
     // if(!lastName) throw new Error("Invalid Last Name");

@@ -42,24 +42,27 @@ router.get("/profile/view",userAuth,(req,res)=>{
 
 router.patch("/profile/edit",userAuth,async(req,res)=>{
     try{
+        
         if(!validateUpdateData(req)) throw new Error("Invalid edit request!");
         const userId = req.user._id;
         const data = req.body;
 
         const loggedInUser = req.user;
-
+        
         Object.keys(req.body).forEach((key)=>(loggedInUser[key]=req.body[key]));
+        
         await loggedInUser.save();
         // const updatedUser = await User.updateOne({_id : userId},{$set:data},{runValidators:true});
         
         // if(updatedUser.matchedCount===0) return res.status(404).send("User not found");
         // if(updatedUser.modifiedCount===0) return res.status(400).send("Nothing was updated");
         
-        await loggedInUser.save()
+        //await loggedInUser.save()
         res.json({message:`${req.user.firstName} User updated successfully.`,
                     data:loggedInUser})
     }
     catch(err){
+        
         res.status(400).send("Error "+ err.message);
     }
 });

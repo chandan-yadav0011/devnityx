@@ -4,16 +4,20 @@ const connectDB = require("./config/database");
 const User = require("./models/user");
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const authRouter = require('./routes/auth');
-const profileRouter = require('./routes/profile');
-const requestRouter = require('./routes/request');
-const userRouter = require("./routes/user");
 app.use(express.json());   // converts the json to javascript object
 app.use(cookieParser());
 app.use(cors({
     origin: "http://localhost:5173",
-    credentials:true
+    credentials:true,   
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
 }));
+
+const authRouter = require('./routes/auth');
+const profileRouter = require('./routes/profile');
+const requestRouter = require('./routes/request');
+const userRouter = require("./routes/user");
+
+
 
 app.use("/",authRouter);
 app.use("/",profileRouter);

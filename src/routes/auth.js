@@ -24,28 +24,29 @@ router.post("/signup",async(req,res)=>{
         });
 
         //Saving to DB 
-        await user.save();
-
-    res.send("User added successfully")
+        const newUser = await user.save();
+        console.log(newUser);
+        const token = await newUser.getJWT();
+       // console.log(token);
+        res.cookie("token",token,{expires:new Date(Date.now()+360000*24)});
+        res.status(200).json({message:"User added successfully",data:newUser})
     }
     catch(err){
-        res.status(400).send("Something went wrong "+ err.message);    
+        res.status(400).send(err.message);    
     }   
-   
 });
 
 router.post("/login",async(req,res)=>{
     
     try
     {
-        // validate
+        // validate 
         validateLoginData(req);
 
         //find user with that creadentials
         const {email,password}= req.body;
         const user = await User.findOne({email});
-        if(!user) return res.status(404).send("User not found!");
-
+        if(!user) throw new Error("Incorrect email Id");
         //dcrypt the password and compare it with entered password 
         const isPasswordValid = await user.validatePassword(password);
 
@@ -54,11 +55,11 @@ router.post("/login",async(req,res)=>{
           
 
             const token = await user.getJWT();
-          //  console.log(token);
+            //console.log(token);
             
             //Add the token to cookie and send the response back to user.
             res.cookie("token",token,{expires:new Date(Date.now()+360000*24)});
-            res.status(200).send("User Logged in successfully.");
+            res.status(200).send(user);
 
         }
         else{
@@ -70,13 +71,20 @@ router.post("/login",async(req,res)=>{
 
     }
     catch(err){
-        res.status(400).send("Something went wrong "+ err.message);
+        res.status(400).send( err.message);
     } 
 });
 
 router.post("/logout",async(req,res)=>{
-    res.cookie("token",null,{expires: new Date(Date.now())});
-    res.send("logout successful");
+
+    try{
+        res.cookie("token",null,{expires: new Date(Date.now())});
+        res.send("logout successful");
+    }
+    catch(err){
+        res.status(400).send(err.message);
+    }
+    
 })
 
 module.exports = router;

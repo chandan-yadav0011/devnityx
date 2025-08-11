@@ -5,8 +5,11 @@ const User = require('../models/user');
 const userAuth = async(req, res,next)=>{
 
     try{
+     
         const {token} = req.cookies; 
-        if(!token) throw new Error("Token not valid!");
+        console.log(token);
+        if(!token) return res.status(401).send("Please login!");
+        
         const decodedMessage = await jwt.verify(token,"Devnityx$12");
         const {userId} = decodedMessage;
 
@@ -18,6 +21,7 @@ const userAuth = async(req, res,next)=>{
         next();
     }
     catch(err){
+       
         res.status(400).send("Error: "+err.message);
     }
 
