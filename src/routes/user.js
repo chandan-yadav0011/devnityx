@@ -108,7 +108,7 @@ router.get("/user/feed", userAuth, async(req,res)=>{
         .skip((page-1)*limit)
         .limit(limit); 
 
-      //  console.log(user);
+    
         res.status(200).json({
             message: "Feed of "+ loggedInUser.firstName,
             data: user,

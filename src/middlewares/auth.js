@@ -7,10 +7,10 @@ const userAuth = async(req, res,next)=>{
     try{
      
         const {token} = req.cookies; 
-        console.log(token);
+      
         if(!token) return res.status(401).send("Please login!");
         
-        const decodedMessage = await jwt.verify(token,"Devnityx$12");
+        const decodedMessage = await jwt.verify(token,process.env.JWT_SECRET);
         const {userId} = decodedMessage;
 
         const user = await User.findById(userId);

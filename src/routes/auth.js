@@ -25,9 +25,9 @@ router.post("/signup",async(req,res)=>{
 
         //Saving to DB 
         const newUser = await user.save();
-        console.log(newUser);
+       
         const token = await newUser.getJWT();
-       // console.log(token);
+       
         res.cookie("token",token,{expires:new Date(Date.now()+360000*24)});
         res.status(200).json({message:"User added successfully",data:newUser})
     }
@@ -55,7 +55,7 @@ router.post("/login",async(req,res)=>{
           
 
             const token = await user.getJWT();
-            //console.log(token);
+          
             
             //Add the token to cookie and send the response back to user.
             res.cookie("token",token,{expires:new Date(Date.now()+360000*24)});

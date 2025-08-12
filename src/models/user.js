@@ -67,7 +67,7 @@ userSchema.methods.getJWT = async function(){
     const payload = {
         userId: user._id
     }
-    const token = await jwt.sign(payload,"Devnityx$12",{expiresIn:"1d"});
+    const token = await jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:"1d"});
     return token;
 };
 
