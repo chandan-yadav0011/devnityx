@@ -8,6 +8,7 @@ app.use(express.json());   // converts the json to javascript object
 app.use(cookieParser());
 
 require("dotenv").config();
+require("./utils/cronjob");
 
 app.use(cors({
     origin: "http://localhost:5173",
