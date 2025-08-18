@@ -3,6 +3,7 @@ const router= express.Router();
 const userAuth= require('../middlewares/auth');
 const ConnectionReq= require("../models/connectionReq");
 const User = require("../models/user")
+const sendEmail= require("../utils/sendEmail")
 
 router.post("/request/send/:status/:toUserId",userAuth,async(req,res)=>{
     try{
@@ -50,7 +51,13 @@ router.post("/request/send/:status/:toUserId",userAuth,async(req,res)=>{
 
         const data = await sendConnection.save();
 
-    
+        console.log("hello")
+        const emailRes = await sendEmail.run(
+            "You have a connection request from "+ req.user.firstName,
+            req.user.firstName + " is "+ status + " in " + toUser.firstName
+        );
+      //  console.log(emailRes);
+        console.log("hello2")
         res.status(200).json({
             message: req.user.firstName + " is "+ status + " in " + toUser.firstName,
             data
