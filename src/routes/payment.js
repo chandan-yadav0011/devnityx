@@ -71,9 +71,9 @@ router.post("/api/payment/webhook", async(req,res)=>{
         console.log("webhook is called")
         const paymentDetails = req.body.payload.payment.entity;
 
-        const payment = await Payment.findOne({order_Id:paymentDetails.order_Id});
+        const payment = await Payment.findOne({order_Id:paymentDetails.order_id});
 
-        payment.status= payment.status;
+        payment.status= paymentDetails.status;
 
         await payment.save();
         
