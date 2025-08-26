@@ -55,7 +55,7 @@ router.post("/payment/create",userAuth, async(req,res)=>{
 
 router.post("/api/payment/webhook", async(req,res)=>{
     try{
-        const webhookSignature = req.get["X-Razorpay-Signature"];
+        const webhookSignature = req.get("X-Razorpay-Signature");
 
         const isWebhookValid = validateWebhookSignature(    // if the source is not valid then this becomes invalid
             JSON.stringify(req.body),
