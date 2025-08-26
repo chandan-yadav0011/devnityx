@@ -64,6 +64,7 @@ router.post("/payment/webhook", async(req,res)=>{
             process.env.RAZORPAY_WEBHOOK_SECRET
         );
 
+        console.log("checking valid")
         if(!isWebhookValid) return res.status(400).json({msg:"Webhook signature is invalid"});
 
         //here we have to update the payment status in db.
