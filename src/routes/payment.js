@@ -24,7 +24,8 @@ router.post("/payment/create",userAuth, async(req,res)=>{
                 lastName: lastName,   
                 email: email,
                 membershipType:membershipType,
-            }
+            },
+            payment_capture:1
         });
 
         //Save the payment info in database
